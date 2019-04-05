@@ -4,15 +4,20 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Animatable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 
 /**
  * Created by scroggo on 4/3/19.
  */
 
-public class MyProgressBar extends ProgressBar {
-    Rect mHitRect;
+public class MyProgressBar extends ProgressBar implements View.OnClickListener {
+    final Rect mHitRect;
+    final Animatable mDrawable;
 
     public MyProgressBar(Context context) {
         this(context, null);
@@ -25,6 +30,18 @@ public class MyProgressBar extends ProgressBar {
     public MyProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mHitRect = new Rect();
+        Drawable d = getIndeterminateDrawable();
+        if (d instanceof  Animatable) {
+            mDrawable = (Animatable) d;
+            setOnClickListener(this);
+        } else {
+            mDrawable = null;
+            log("NOT Animatable?");
+        }
+    }
+
+    private static void log(String msg) {
+        Log.d("SCROGGO", msg);
     }
 
     @Override
@@ -43,5 +60,16 @@ public class MyProgressBar extends ProgressBar {
         canvas.drawRect(mHitRect, p);
         canvas.translate(getMeasuredWidth() / 4, 0);
         super.onDraw(canvas);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mDrawable.isRunning()) {
+            log("stop");
+            mDrawable.stop();
+        } else {
+            log("start");
+            mDrawable.start();
+        }
     }
 }
