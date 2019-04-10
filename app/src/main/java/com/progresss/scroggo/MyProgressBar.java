@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Animatable;
+//import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.ProgressBar;
 public class MyProgressBar extends ProgressBar implements View.OnClickListener {
     final Rect mHitRect;
     final Animatable mDrawable;
+    //Handler mHandler;
 
     public MyProgressBar(Context context) {
         this(context, null);
@@ -64,12 +67,29 @@ public class MyProgressBar extends ProgressBar implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (mDrawable.isRunning()) {
-            log("stop");
-            mDrawable.stop();
-        } else {
-            log("start");
-            mDrawable.start();
-        }
+        log("click!");
+        getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mDrawable.isRunning()) {
+                    log("stop");
+                    mDrawable.stop();
+                } else {
+                    log("start");
+                    mDrawable.start();
+                }
+            }
+        }, 3000);
     }
+
+/*
+    // Looks like View already has a version of this. It can return null, but maybe not in any case
+    // that I care about?
+    private Handler getHandler() {
+        if (mHandler == null) {
+            mHandler = new Handler(Looper.getMainLooper());
+        }
+        return mHandler;
+    }
+*/
 }
