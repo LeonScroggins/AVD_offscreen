@@ -2,6 +2,9 @@ package com.progresss.scroggo;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
@@ -28,7 +31,12 @@ public class MyProgressBar extends ProgressBar {
 
     @Override
     protected synchronized void onDraw(Canvas canvas) {
-        canvas.translate(1080, 0);
+        canvas.rotate(45, getMeasuredWidth() / 2, getMeasuredHeight() / 2);
         super.onDraw(canvas);
+        Rect bounds = getIndeterminateDrawable().getBounds();
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.BLUE);
+        canvas.drawRect(bounds, paint);
     }
 }
